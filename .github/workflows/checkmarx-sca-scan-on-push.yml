@@ -35,5 +35,5 @@ jobs:
         sca_password: ${{ secrets.CHECKMARX_SCA_PASSWORD }} # To be stored in GitHub Secrets.
         break_build: false
         scanners: sca
-        bug_tracker: GitHub
-        params: --sca.enabledZipScan=true --sca.filter-score=8.0 --sca.filter-severity=HIGH --namespace=${{ github.repository_owner }} --repo-name=${{ github.event.repository.name }} --branch=${{ github.ref }}
+        bug_tracker: JIRA
+        params: --config=cx.config  --jira.url=${{secrets.JIRA_URL}} --jira.username=${{secrets.JIRA_USER}} --jira.token=${{secrets.JIRA_TOKEN}} --sca.enabledZipScan=true --sca.filter-score=8.0 --sca.filter-severity=HIGH --namespace=${{ github.repository_owner }} --repo-name=${{ github.event.repository.name }} --branch=${{ github.ref }}
