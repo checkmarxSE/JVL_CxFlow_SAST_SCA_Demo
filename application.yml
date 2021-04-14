@@ -1,0 +1,96 @@
+logging:
+  file: flow.log
+  level:
+    com:
+      checkmarx:
+        flow:
+          service: TRACE
+    org:
+      apache:
+        http:
+          wire: TRACE
+      springframework:
+        web:
+          client:
+            RestTemplate: TRACE
+
+cxflow:
+  bug-tracker: Jira
+  #bug-tracker-impl:
+  #- GitHub
+  branches:
+  - master
+  filter-severity:
+  filter-category:
+  - SQL_Injection
+  - Stored_XSS
+  - Reflected_XSS_All_Clients
+  filter-cwe:
+  filter-status:
+  #   - Urgent
+  #   - Confirmed
+  #mitre-url: https://cwe.mitre.org/data/definitions/%s.html
+  #wiki-url: https://custodela.atlassian.net/wiki/spaces/AS/pages/79462432/Remediation+Guidance
+  codebash-url: https://checkmarx-demo.codebashing.com/courses/
+
+jira:
+  url: ${{ secrets.JIRA_URL }}
+  username: philipmolive@gmail.com
+  token: ${{ secrets.JIRA_TOKEN }}
+  project: DSVW
+  issue-type: Bug
+  priorities:
+    High: High
+    Medium: Medium
+    Low: Low
+    Informational: Lowest
+  open-transition: In Progress
+  close-transition: Done
+  open-status:
+    - Backlog
+    - Selected for Development
+    - In Progress
+  closed-status:
+    - Done
+  fields:
+    - type: result
+      name: application
+      jira-field-name: Application
+      jira-field-type: label
+#    - type: result
+#      name: cwe
+#      jira-field-name: CWEs
+#      jira-field-type: label
+    - type: result
+      name: category
+      jira-field-name: Category
+      jira-field-type: label
+#    - type: result
+#      name: loc
+#      jira-field-name: LOC
+#      jira-field-type: label
+#      jira-default-value: XXXXX
+
+checkmarx:
+  version: 9.0
+  scope: access_control_api sast_rest_api
+  team: /CxServer/
+  username: admin
+  password: ${{ secrets.CHECKMARX_SCA_USERNAME }}
+  client-secret: 014DF517-39D1-4453-B7B3-9930C563627C
+  base-url: http://cxsast.ngrok.io
+  url: ${checkmarx.base-url}/cxrestapi
+  #WSDL Config
+  portal-url: ${checkmarx.base-url}/cxwebinterface/Portal/CxWebService.asmx
+  sdk-url: ${checkmarx.base-url}/cxwebinterface/SDK/CxSDKWebService.asmx
+  portal-wsdl: ${checkmarx.base-url}/Portal/CxWebService.asmx?wsdl
+  sdk-wsdl: ${checkmarx.base-url}/SDK/CxSDKWebService.asmx?wsdl
+
+
+github:
+  webhook-token: 12345
+  token: ${{ secrets.GH_TOKEN }}
+  url: https://github.com
+  api-url: https://api.github.com/repos/
+  false-positive-label: false-positive
+  block-merge: true
