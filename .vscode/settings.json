@@ -1,0 +1,11 @@
+{
+    "cx.server": {
+        "url": "http://localhost/",
+        "alias": "CxSAST",
+        "username": "admin",
+        "password": "OfRH0DrcFOELjXFrnWPkElQNcE/HVQAUf/w=",
+        "project_id": 170,
+        "team_id": 15,
+        "project_name": "JVL_CxFlow_SAST_SCA_Demo-master"
+    }
+}
