@@ -19,7 +19,6 @@ import org.cysecurity.cspf.jvl.model.DBConnect;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.json.XMLTokener;
-import fake;
 
 /**
  *
@@ -48,11 +47,9 @@ public class EmailCheck extends HttpServlet {
                jsont.nextMeta();
                 if(con!=null && !con.isClosed())
                 {
-					ResultSet rs=null;
-                    sql = "select * from users where email=?";
-                    PreparedStatement preparedStatement = con.prepareStatement(sql);
-                    preparedStatement.setString(1,email);
-                    rs = preparedStatement.executeQuery();
+                    ResultSet rs=null;
+                    Statement stmt = con.createStatement();  
+                    rs=stmt.executeQuery("select * from users where email='"+email+"'");
                     if (rs.next()) 
                     {  
                      json.put("available", "1"); 
