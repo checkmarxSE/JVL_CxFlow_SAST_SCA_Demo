@@ -1,0 +1,73 @@
+# This is a basic workflow to help you get started with Using Checkmarx CxFlow Action-1
+
+name: CxFlow SAST + SCA + Kics
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel - this job is specifically configured to use the Checkmarx CxFlow Action
+jobs:
+ kics-job:
+    runs-on: ubuntu-latest
+    name: kics-github-action
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Mkdir results-dir
+        # make sure results dir is created
+        run: mkdir -p results-dir
+      - name: Run KICS Scan with SARIF result
+        uses: Checkmarx/kics-github-action@v1.2
+        with:
+          # comma separated list of paths
+          path: 'terraform,my-subdir,my-other-subdir/my-file.tf'
+          # when provided with a directory on output_path
+          # it will generate the specified reports file named 'results.{extension}'
+          # in this example it will generate:
+          # - results-dir/results.json
+          # - results-dir/results.sarif
+          output_path: results-dir
+          platform_type: terraform
+          # Will exit with status code 0 even if results are found
+          ignore_on_exit: results
+          output_formats: 'json,sarif'
+          exclude_paths: "terraform/gcp/big_data.tf,terraform/azure"
+          # look for the queries' ID in its metadata.json
+          exclude_queries: 0437633b-daa6-4bbc-8526-c0d2443b946e
+      - name: Show results
+        run: |
+          cat results-dir/results.sarif
+          cat results-dir/results.json
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: results-dir/results.sarif
+ build:
+  runs-on: ubuntu-latest
+  # Steps require - checkout code, run CxFlow Action, Upload SARIF report (optional)
+  steps:
+  # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+  - uses: actions/checkout@v2
+  # Runs the Checkmarx Scan leveraging the latest version of CxFlow - REFER to Action README for list of inputs
+  - name: Checkmarx CxFlow Action
+    uses: checkmarx-ts/checkmarx-cxflow-github-action@v1.0-9.x
+    with:
+      project: GithubActionTest
+      team: '/CxServer/checkmarxSE'
+      checkmarx_url: ${{ secrets.CHECKMARX_URL }}
+      checkmarx_username: ${{ secrets.CHECKMARX_USERNAME }}
+      checkmarx_password: ${{ secrets.CHECKMARX_PASSWORD }}
+      checkmarx_client_secret: ${{ secrets.CHECKMARX_CLIENT_SECRET }}
+      params: --checkmarx.scan-preset=High and Medium --cxflow.enabled-vulnerability-scanners=sast --cxflow.enabled-vulnerability-scanners=sca --sca.appUrl=https://sca.scacheckmarx.com --sca.apiUrl=https://api.scacheckmarx.com --sca.accessControlUrl=https://platform.checkmarx.net --sca.tenant=${{ secrets.SCA_TENANT }} --sca.username=${{ secrets.SCA_USERNAME }} --sca.password=${{ secrets.SCA_PASSWORD }} --checkmarx.incremental=false
+  # Upload the Report for CodeQL/Security Alerts
+  - name: Upload SARIF file
+    uses: github/codeql-action/upload-sarif@v1
+    with:
+      sarif_file: cx.sarif
+
+   
