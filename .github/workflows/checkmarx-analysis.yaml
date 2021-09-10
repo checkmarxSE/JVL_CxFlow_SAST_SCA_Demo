@@ -28,7 +28,7 @@ jobs:
       checkmarx_username: ${{ secrets.CHECKMARX_USERNAME }}
       checkmarx_password: ${{ secrets.CHECKMARX_PASSWORD }}
       checkmarx_client_secret: ${{ secrets.CHECKMARX_CLIENT_SECRET }}
-      params: --checkmarx.scan-preset=High and Medium --cxflow.enabled-vulnerability-scanners=sast --checkmarx.incremental=false --cx-flow.zip-exclude="main/java/org/cysecurity/cspf/jvl" #--cxflow.enabled-vulnerability-scanners=sca --sca.appUrl=https://sca.scacheckmarx.com --sca.apiUrl=https://api.scacheckmarx.com --sca.accessControlUrl=https://platform.checkmarx.net --sca.tenant=${{ secrets.SCA_TENANT }} --sca.username=${{ secrets.SCA_USERNAME }} --sca.password=${{ secrets.SCA_PASSWORD }} 
+      params: --checkmarx.scan-preset=High and Medium --cxflow.enabled-vulnerability-scanners=sast --checkmarx.incremental=false --cx-flow.zip-exclude=\.git/.*, .*\.png #--cxflow.enabled-vulnerability-scanners=sca --sca.appUrl=https://sca.scacheckmarx.com --sca.apiUrl=https://api.scacheckmarx.com --sca.accessControlUrl=https://platform.checkmarx.net --sca.tenant=${{ secrets.SCA_TENANT }} --sca.username=${{ secrets.SCA_USERNAME }} --sca.password=${{ secrets.SCA_PASSWORD }} 
   # Upload the Report for CodeQL/Security Alerts
   - name: Upload SARIF file
     uses: github/codeql-action/upload-sarif@v1
