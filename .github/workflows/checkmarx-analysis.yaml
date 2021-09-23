@@ -28,7 +28,6 @@ jobs:
       checkmarx_username: ${{ secrets.CHECKMARX_USERNAME }}
       checkmarx_password: ${{ secrets.CHECKMARX_PASSWORD }}
       checkmarx_client_secret: ${{ secrets.CHECKMARX_CLIENT_SECRET }}
-      github_token: ${{ secrets.GH_TOKEN }}
       params: --checkmarx.scan-preset=High and Medium --cxflow.enabled-vulnerability-scanners=sast --checkmarx.incremental=false 
   # Upload the Report for CodeQL/Security Alerts
   - name: Upload SARIF file
