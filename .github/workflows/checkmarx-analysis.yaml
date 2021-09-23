@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Using Checkmarx CxFlow Action-1
 
-name: CxFlow SAST + SCA
+name: CxFlow SAST
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
@@ -22,19 +22,19 @@ jobs:
   - name: Checkmarx CxFlow Action
     uses: checkmarx-ts/checkmarx-cxflow-github-action@v1.1
     with:
-      project: GithubActionTest
+      project: GithubActionTest-2
       team: '/CxServer/checkmarxSE'
       checkmarx_url: ${{ secrets.CHECKMARX_URL }}
       checkmarx_username: ${{ secrets.CHECKMARX_USERNAME }}
       checkmarx_password: ${{ secrets.CHECKMARX_PASSWORD }}
       checkmarx_client_secret: ${{ secrets.CHECKMARX_CLIENT_SECRET }}
       bug_tracker: GitHubPull
-      github_token: GH_TOKEN
-      params: --checkmarx.scan-preset=High and Medium --cxflow.enabled-vulnerability-scanners=sast --checkmarx.incremental=false --cx-flow.zip-exclude=="\.git\/.*,\\.github\/.*,apps\/api-tests\/.*,apps\/aui-docs\/.*,apps\/integrations-heartbeat\/.*,apps\/web-e2e\/.*,apps\/web\/.*"  --cxflow.enabled-vulnerability-scanners=sca --sca.appUrl=https://sca.scacheckmarx.com --sca.apiUrl=https://api.scacheckmarx.com --sca.accessControlUrl=https://platform.checkmarx.net --sca.tenant=${{ secrets.SCA_TENANT }} --sca.username=${{ secrets.SCA_USERNAME }} --sca.password=${{ secrets.SCA_PASSWORD }} 
+      github_token: ${{ secrets.GH_TOKEN }}
+      params: --checkmarx.scan-preset=High and Medium --cxflow.enabled-vulnerability-scanners=sast --checkmarx.incremental=false 
   # Upload the Report for CodeQL/Security Alerts
-  - name: Upload SARIF file
-    uses: github/codeql-action/upload-sarif@v1
-    with:
-      sarif_file: cx.sarif
+  #- name: Upload SARIF file
+  #  uses: github/codeql-action/upload-sarif@v1
+  #  with:
+  #    sarif_file: cx.sarif
 
    
